@@ -1,16 +1,18 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, ListRenderItemInfo } from "react-native";
+import React from "react";
+import { HStack, Image, Text, View, VStack } from "native-base";
+import { Movie } from "../screens/HomeScreen";
 
-type Props = {}
-
-const MoviesCard = (props: Props) => {
+const MoviesCard = ({ item }: ListRenderItemInfo<Movie>) => {
   return (
-    <View>
-      <Text>MoviesCard</Text>
-    </View>
-  )
-}
+    <VStack>
+      <Text>{item.title}</Text>
+      {/* <Text>{item.poster_path}</Text> */}
+      <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}` }} height={100} width={100} alt="Test" />
+    </VStack>
+  );
+};
 
-export default MoviesCard
+export default MoviesCard;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
