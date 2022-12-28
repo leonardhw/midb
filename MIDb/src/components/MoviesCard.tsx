@@ -9,7 +9,7 @@ interface Props {
 }
 
 const MoviesCard = ({ item }: Props) => {
-  const navigation: RootNavigationProps["navigation"] = useNavigation();
+  const navigation = useNavigation();
 
   return (
     <Pressable onPress={() => navigation.navigate("MovieDetail", { id: item.id })}>

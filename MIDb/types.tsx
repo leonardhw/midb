@@ -79,10 +79,7 @@ export interface States {
     name?: string;
     popularity?: number;
     profile_path?: string | null;
-    cast_id?: number;
     character?: string;
-    credit_id?: string;
-    order?: number;
   };
   cast: {
     biography: string;

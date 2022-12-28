@@ -54,9 +54,9 @@ const MovieDetailScreen = ({ route }: MovieStackScreenProps<"MovieDetail">) => {
       keyExtractor={(item: any) => item.id}
       numColumns={3}
       renderItem={({ item }) => (
-        <Pressable onPress={() => navigation.navigate("CastStackNavigator", { screen: "CastDetail", params: { id: item.id } })}>
+        <Pressable onPress={() => navigation.navigate("CastDetail", { id: item.id })}>
           <View>
-            <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${item.profile_path}` }} height={100} width={100} alt="alt" />
+            <Image source={{ uri: item.profile_path ? `https://image.tmdb.org/t/p/w500/${item.profile_path}` : "https://placekitten.com/100/100" }} height={100} width={100} alt="alt" />
             <Text>{item.name}</Text>
           </View>
         </Pressable>

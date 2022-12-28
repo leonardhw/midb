@@ -9,10 +9,10 @@ const MoviesListScreen = ({ navigation, route }: MovieStackScreenProps<"Movies">
   const [movies, setMovies] = useState<States["movies"][]>([]);
 
   useEffect(() => {
-    fetch();
+    fetchMovies();
   }, []);
 
-  const fetch = async () => {
+  const fetchMovies = async () => {
     try {
       const { data } = await axios.get("/3/movie/now_playing?language=en-US", {
         params: {
