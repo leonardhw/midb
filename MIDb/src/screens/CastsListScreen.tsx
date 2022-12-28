@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { RootTabScreenProps } from "../../types";
+import { CastStackScreenProps } from "../../types";
 
-const CastsListScreen = ({ navigation, route }: RootTabScreenProps<"Casts">) => {
+const CastsListScreen = ({ navigation, route }: CastStackScreenProps<"Casts">) => {
+  console.log(route);
+
   return (
     <View>
       <Text>CastsListScreen</Text>

@@ -1,6 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { StyleSheet, ListRenderItemInfo } from "react-native";
+import React, { useEffect, useState } from "react";
 import type { RootTabScreenProps } from "../../types";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { FlatList, Image, Text, View } from "native-base";
+import MoviesCard from "../components/MoviesCard";
 
 const HomeScreen = ({ navigation, route }: RootTabScreenProps<"Home">) => {
   return (
