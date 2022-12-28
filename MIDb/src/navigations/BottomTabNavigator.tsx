@@ -12,7 +12,7 @@ type Props = {};
 
 const BottomTabNavigator = (props: Props) => {
   return (
-    <Tab.Navigator initialRouteName="Home">
+    <Tab.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="MovieStackNavigator" component={MovieStackNavigator} />
       <Tab.Screen name="CastStackNavigator" component={CastStackNavigator} />

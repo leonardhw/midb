@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator<MovieStackParamList>();
 
 const MovieStackNavigator = (props: Props) => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Movies">
       <Stack.Screen name="Movies" component={MoviesListScreen} />
       <Stack.Screen name="MovieDetail" component={MovieDetailScreen} />
     </Stack.Navigator>

@@ -11,7 +11,7 @@ type Props = {};
 
 const CastStackNavigator = (props: Props) => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Casts">
       <Stack.Screen name="Casts" component={CastsListScreen} />
       <Stack.Screen name="CastDetail" component={CastDetailScreen} />
     </Stack.Navigator>

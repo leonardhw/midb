@@ -1,9 +1,16 @@
 import { StyleSheet, ListRenderItemInfo } from "react-native";
 import React from "react";
 import { HStack, Image, Pressable, Text, View, VStack } from "native-base";
-import { Movie } from "../screens/MoviesListScreen";
+import { useNavigation } from "@react-navigation/native";
+import { MovieStackScreenProps, RootNavigationProps, States } from "../../types";
 
-const MoviesCard = ({ item, navigation }: ListRenderItemInfo<Movie>) => {
+interface Props {
+  item: States["movies"];
+}
+
+const MoviesCard = ({ item }: Props) => {
+  const navigation: RootNavigationProps["navigation"] = useNavigation();
+
   return (
     <Pressable onPress={() => navigation.navigate("MovieDetail", { id: item.id })}>
       <View>

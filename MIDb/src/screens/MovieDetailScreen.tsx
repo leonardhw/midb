@@ -1,14 +1,17 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { MovieStackScreenProps } from "../../types";
+import { MovieStackScreenProps, RootNavigationProps, RootTabScreenProps } from "../../types";
 import axios from "../apis/axios";
 import { FlatList, Image, ScrollView } from "native-base";
+import { States } from "../../types";
+import { useNavigation } from "@react-navigation/native";
 
-const MovieDetailScreen = ({ navigation, route }: MovieStackScreenProps<"Movies">) => {
+const MovieDetailScreen = ({ route }: MovieStackScreenProps<"MovieDetail">) => {
   const { id: movieId } = route.params;
+  const navigation: RootNavigationProps["navigation"] = useNavigation();
 
-  const [movie, setMovie] = useState({});
-  const [casts, setCasts] = useState([]);
+  const [movie, setMovie] = useState<States["movie"]>({});
+  const [casts, setCasts] = useState<States["casts"][]>([]);
 
   useEffect(() => {
     fetchMovieDetail();
@@ -36,23 +39,30 @@ const MovieDetailScreen = ({ navigation, route }: MovieStackScreenProps<"Movies"
     }
   };
 
+  const headerSection = () => (
+    <View>
+      <Text>{movieId}</Text>
+      <Text>{movie.title}</Text>
+      <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${movie.poster_path}` }} height={100} width={100} alt="alt" />
+      <Text>{movie.overview}</Text>
+    </View>
+  );
+
   return (
-    <ScrollView>
-      <View>
-        <Text>{movieId}</Text>
-        <Text>{movie.title}</Text>
-        <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${movie.poster_path}` }} height={100} width={100} alt="alt" />
-        <Text>{movie.overview}</Text>
-      </View>
-      <FlatList
-        data={casts}
-        renderItem={({ item }) => (
+    <FlatList
+      data={casts}
+      keyExtractor={(item: any) => item.id}
+      numColumns={3}
+      renderItem={({ item }) => (
+        <Pressable onPress={() => navigation.navigate("CastStackNavigator", { screen: "CastDetail", params: { id: item.id } })}>
           <View>
+            <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${item.profile_path}` }} height={100} width={100} alt="alt" />
             <Text>{item.name}</Text>
           </View>
-        )}
-      />
-    </ScrollView>
+        </Pressable>
+      )}
+      ListHeaderComponent={headerSection}
+    />
   );
 };
 

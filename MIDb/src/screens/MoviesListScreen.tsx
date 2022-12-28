@@ -1,20 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ListRenderItem, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
-import { MovieStackScreenProps } from "../../types";
-import { Button, FlatList } from "native-base";
+import { MovieStackScreenProps, States } from "../../types";
+import { Button } from "native-base";
 import MoviesCard from "../components/MoviesCard";
 import axios from "../apis/axios";
 
-export interface Movie {
-  id: number;
-  backdrop_path: string;
-  overview: string;
-  poster_path: string;
-  title: string;
-}
-
 const MoviesListScreen = ({ navigation, route }: MovieStackScreenProps<"Movies">) => {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<States["movies"][]>([]);
 
   useEffect(() => {
     fetch();
@@ -42,13 +34,7 @@ const MoviesListScreen = ({ navigation, route }: MovieStackScreenProps<"Movies">
   );
 
   return (
-    <FlatList
-      data={movies}
-      renderItem={({ item }) => <MoviesCard item={item} navigation={navigation} />}
-      // numColumns={2}
-      keyExtractor={(item) => item?.id}
-      ListHeaderComponent={headerSection}
-    />
+    <FlatList data={movies} renderItem={({ item }) => <MoviesCard item={item} />} keyExtractor={(item: any) => item.id} />
     // <Button onPress={() => navigation.navigate("Home")}>Test</Button>
   );
 };
