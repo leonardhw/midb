@@ -4,36 +4,29 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootTabParamList {}
+    interface RootParamList extends RootStackParamList {}
   }
 }
 
-export type RootTabParamList = {
-  Home: undefined;
-  MovieStackNavigator: NavigatorScreenParams<MovieStackParamList>;
-  CastStackNavigator: NavigatorScreenParams<CastStackParamList>;
-};
-
-export type RootTabScreenProps<Screen extends keyof RootTabParamList> = BottomTabScreenProps<RootTabParamList, Screen>;
-
-export type RootNavigationProps = CompositeScreenProps<BottomTabScreenProps<RootTabParamList, "Home">, CompositeScreenProps<NativeStackScreenProps<MovieStackParamList>, NativeStackScreenProps<CastStackParamList>>>;
-
-export type MovieStackParamList = {
-  Movies: undefined;
+export type RootStackParamList = {
+  BottomTabNavigator: NavigatorScreenParams<RootTabParamList>;
   MovieDetail: {
     id: number | null | undefined;
   };
-};
-export type MovieStackScreenProps<Screen extends keyof MovieStackParamList> = NativeStackScreenProps<MovieStackParamList, Screen>;
-
-export type CastStackParamList = {
-  Casts: undefined;
   CastDetail: {
     id: number | null | undefined;
   };
 };
 
-export type CastStackScreenProps<Screen extends keyof CastStackParamList> = NativeStackScreenProps<CastStackParamList, Screen>;
+export type RootNavigationProps<Screen extends keyof RootStackParamList> = CompositeScreenProps<NativeStackScreenProps<RootStackParamList, Screen>, BottomTabScreenProps<RootTabParamList>>;
+
+export type RootTabParamList = {
+  Home: undefined;
+  MoviesList: undefined;
+  CastsList: undefined;
+};
+
+export type RootTabScreenProps<Screen extends keyof RootTabParamList> = BottomTabScreenProps<RootTabParamList, Screen>;
 
 //* State
 export interface States {

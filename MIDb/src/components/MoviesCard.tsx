@@ -2,7 +2,7 @@ import { StyleSheet, ListRenderItemInfo } from "react-native";
 import React from "react";
 import { HStack, Image, Pressable, Text, View, VStack } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { MovieStackScreenProps, RootNavigationProps, States } from "../../types";
+import { RootNavigationProps, States } from "../../types";
 
 interface Props {
   item: States["movies"];

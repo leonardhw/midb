@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, ListRenderItem, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
-import { MovieStackScreenProps, States } from "../../types";
+import { RootTabScreenProps, States } from "../../types";
 import { Button } from "native-base";
 import MoviesCard from "../components/MoviesCard";
 import axios from "../apis/axios";
 
-const MoviesListScreen = ({ navigation, route }: MovieStackScreenProps<"Movies">) => {
+const MoviesListScreen = ({ navigation, route }: RootTabScreenProps<"MoviesList">) => {
   const [movies, setMovies] = useState<States["movies"][]>([]);
 
   useEffect(() => {

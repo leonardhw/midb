@@ -9,7 +9,7 @@ interface Props {
 }
 
 const CastsCard = ({ item }: Props) => {
-  const navigation: RootNavigationProps["navigation"] = useNavigation();
+  const navigation = useNavigation();
 
   return (
     <Pressable onPress={() => navigation.navigate("CastDetail", { id: item.id })}>

@@ -1,14 +1,14 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { MovieStackScreenProps, RootNavigationProps, RootTabScreenProps } from "../../types";
+import { RootNavigationProps, RootTabScreenProps } from "../../types";
 import axios from "../apis/axios";
 import { FlatList, Image, ScrollView } from "native-base";
 import { States } from "../../types";
 import { useNavigation } from "@react-navigation/native";
 
-const MovieDetailScreen = ({ route }: MovieStackScreenProps<"MovieDetail">) => {
+const MovieDetailScreen = ({ route }: RootNavigationProps<"MovieDetail">) => {
   const { id: movieId } = route.params;
-  const navigation: RootNavigationProps["navigation"] = useNavigation();
+  const navigation = useNavigation();
 
   const [movie, setMovie] = useState<States["movie"]>({});
   const [casts, setCasts] = useState<States["casts"][]>([]);
