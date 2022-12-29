@@ -4,50 +4,32 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootTabParamList {}
+    interface RootParamList extends RootStackParamList {}
   }
 }
 
-export type RootTabParamList = {
-  Home: undefined;
-  MovieStackNavigator: NavigatorScreenParams<MovieStackParamList>;
-  CastStackNavigator: NavigatorScreenParams<CastStackParamList>;
-};
-
-export type RootTabScreenProps<Screen extends keyof RootTabParamList> = BottomTabScreenProps<RootTabParamList, Screen>;
-
-export type RootNavigationProps = CompositeScreenProps<BottomTabScreenProps<RootTabParamList, "Home">, CompositeScreenProps<NativeStackScreenProps<MovieStackParamList>, NativeStackScreenProps<CastStackParamList>>>;
-
-export type MovieStackParamList = {
-  Movies: undefined;
+export type RootStackParamList = {
+  BottomTabNavigator: NavigatorScreenParams<RootTabParamList>;
   MovieDetail: {
     id: number | null | undefined;
   };
-};
-export type MovieStackScreenProps<Screen extends keyof MovieStackParamList> = NativeStackScreenProps<MovieStackParamList, Screen>;
-
-export type CastStackParamList = {
-  Casts: undefined;
   CastDetail: {
     id: number | null | undefined;
   };
 };
 
-export type CastStackScreenProps<Screen extends keyof CastStackParamList> = NativeStackScreenProps<CastStackParamList, Screen>;
+export type RootNavigationProps<Screen extends keyof RootStackParamList> = CompositeScreenProps<NativeStackScreenProps<RootStackParamList, Screen>, BottomTabScreenProps<RootTabParamList>>;
+
+export type RootTabParamList = {
+  Home: undefined;
+  MoviesList: undefined;
+  CastsList: undefined;
+};
+
+export type RootTabScreenProps<Screen extends keyof RootTabParamList> = BottomTabScreenProps<RootTabParamList, Screen>;
 
 //* State
 export interface States {
-  movies: {
-    id?: number;
-    title?: string;
-    poster_path?: string | null;
-    backdrop_path?: string | null;
-    vote_average?: number;
-    release_date?: string;
-    genre_ids?: number[];
-    popularity?: number;
-    vote_count?: number;
-  };
   movie: {
     id?: number;
     title?: string;
@@ -56,7 +38,7 @@ export interface States {
     vote_count?: number;
     poster_path?: number;
     backdrop_path?: string;
-    release_date?: Date;
+    release_date?: string;
     genres?: {
       id: number;
       name: string;
@@ -73,24 +55,16 @@ export interface States {
     revenue?: number;
     status?: string;
     tagline?: string | null;
-  };
-  casts: {
-    id?: number;
-    name?: string;
-    popularity?: number;
-    profile_path?: string | null;
-    cast_id?: number;
-    character?: string;
-    credit_id?: string;
-    order?: number;
+    genre_ids?: number[];
   };
   cast: {
-    biography: string;
-    birthday: Date;
-    id: number;
-    name: string;
-    place_of_birth: string;
-    popularity: number;
-    profile_path: string;
+    biography?: string;
+    birthday?: Date;
+    id?: number;
+    name?: string;
+    place_of_birth?: string;
+    popularity?: number;
+    profile_path?: string | null;
+    character?: string;
   };
 }

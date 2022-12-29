@@ -1,14 +1,36 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { CastStackScreenProps } from "../../types";
+import React, { useEffect, useState } from "react";
+import { RootTabScreenProps, States } from "../../types";
+import axios from "../apis/axios";
+import { FlatList, Image } from "native-base";
+import CastsCard from "../components/CastsCard";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const CastsListScreen = ({ navigation, route }: CastStackScreenProps<"Casts">) => {
-  console.log(route);
+const CastsListScreen = ({ navigation, route }: RootTabScreenProps<"CastsList">) => {
+  const [casts, setCasts] = useState<States["cast"][]>();
+
+  const fetchCasts = async () => {
+    const { data } = await axios.get("/3/person/popular", {
+      params: {
+        page: 1,
+      },
+    });
+    // console.log(data);
+
+    setCasts(data.results);
+  };
+
+  useEffect(() => {
+    fetchCasts();
+  }, []);
 
   return (
-    <View>
-      <Text>CastsListScreen</Text>
-    </View>
+    <SafeAreaView>
+      <View>
+        <Text>CastsListScreen</Text>
+        <FlatList data={casts} renderItem={({ item }) => <CastsCard item={item} />} keyExtractor={(item: any) => item.id} />
+      </View>
+    </SafeAreaView>
   );
 };
 

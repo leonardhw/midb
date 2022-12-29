@@ -1,18 +1,19 @@
 import { StyleSheet, Text, View, ListRenderItem, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
-import { MovieStackScreenProps, States } from "../../types";
+import { RootTabScreenProps, States } from "../../types";
 import { Button } from "native-base";
 import MoviesCard from "../components/MoviesCard";
 import axios from "../apis/axios";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const MoviesListScreen = ({ navigation, route }: MovieStackScreenProps<"Movies">) => {
-  const [movies, setMovies] = useState<States["movies"][]>([]);
+const MoviesListScreen = ({ navigation, route }: RootTabScreenProps<"MoviesList">) => {
+  const [movies, setMovies] = useState<States["movie"][]>([]);
 
   useEffect(() => {
-    fetch();
+    fetchMovies();
   }, []);
 
-  const fetch = async () => {
+  const fetchMovies = async () => {
     try {
       const { data } = await axios.get("/3/movie/now_playing?language=en-US", {
         params: {
@@ -34,7 +35,9 @@ const MoviesListScreen = ({ navigation, route }: MovieStackScreenProps<"Movies">
   );
 
   return (
-    <FlatList data={movies} renderItem={({ item }) => <MoviesCard item={item} />} keyExtractor={(item: any) => item.id} />
+    <SafeAreaView>
+      <FlatList data={movies} renderItem={({ item }) => <MoviesCard item={item} />} keyExtractor={(item: any) => item.id} />
+    </SafeAreaView>
     // <Button onPress={() => navigation.navigate("Home")}>Test</Button>
   );
 };
