@@ -30,17 +30,6 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = BottomTa
 
 //* State
 export interface States {
-  movies: {
-    id?: number;
-    title?: string;
-    poster_path?: string | null;
-    backdrop_path?: string | null;
-    vote_average?: number;
-    release_date?: string;
-    genre_ids?: number[];
-    popularity?: number;
-    vote_count?: number;
-  };
   movie: {
     id?: number;
     title?: string;
@@ -49,7 +38,7 @@ export interface States {
     vote_count?: number;
     poster_path?: number;
     backdrop_path?: string;
-    release_date?: Date;
+    release_date?: string;
     genres?: {
       id: number;
       name: string;
@@ -66,21 +55,16 @@ export interface States {
     revenue?: number;
     status?: string;
     tagline?: string | null;
+    genre_ids?: number[];
   };
-  casts: {
+  cast: {
+    biography?: string;
+    birthday?: Date;
     id?: number;
     name?: string;
+    place_of_birth?: string;
     popularity?: number;
     profile_path?: string | null;
     character?: string;
-  };
-  cast: {
-    biography: string;
-    birthday: Date;
-    id: number;
-    name: string;
-    place_of_birth: string;
-    popularity: number;
-    profile_path: string;
   };
 }

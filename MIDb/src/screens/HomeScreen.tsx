@@ -7,9 +7,11 @@ import MoviesCard from "../components/MoviesCard";
 
 const HomeScreen = ({ navigation, route }: RootTabScreenProps<"Home">) => {
   return (
-    <View>
-      <Text>HomeScreen</Text>
-    </View>
+    <SafeAreaView>
+      <View>
+        <Text>HomeScreen</Text>
+      </View>
+    </SafeAreaView>
   );
 };
 

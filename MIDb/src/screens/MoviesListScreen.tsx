@@ -4,9 +4,10 @@ import { RootTabScreenProps, States } from "../../types";
 import { Button } from "native-base";
 import MoviesCard from "../components/MoviesCard";
 import axios from "../apis/axios";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const MoviesListScreen = ({ navigation, route }: RootTabScreenProps<"MoviesList">) => {
-  const [movies, setMovies] = useState<States["movies"][]>([]);
+  const [movies, setMovies] = useState<States["movie"][]>([]);
 
   useEffect(() => {
     fetchMovies();
@@ -34,7 +35,9 @@ const MoviesListScreen = ({ navigation, route }: RootTabScreenProps<"MoviesList"
   );
 
   return (
-    <FlatList data={movies} renderItem={({ item }) => <MoviesCard item={item} />} keyExtractor={(item: any) => item.id} />
+    <SafeAreaView>
+      <FlatList data={movies} renderItem={({ item }) => <MoviesCard item={item} />} keyExtractor={(item: any) => item.id} />
+    </SafeAreaView>
     // <Button onPress={() => navigation.navigate("Home")}>Test</Button>
   );
 };

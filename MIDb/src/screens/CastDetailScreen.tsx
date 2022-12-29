@@ -1,23 +1,31 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { CastStackScreenProps, States } from "../../types";
+import { RootNavigationProps, States } from "../../types";
 import axios from "../apis/axios";
-import { Image, ScrollView } from "native-base";
+import { FlatList, Image, ScrollView } from "native-base";
+import MoviesCard from "../components/MoviesCard";
 
 type Props = {};
 
-const CastDetailScreen = ({ navigation, route }: CastStackScreenProps<"CastDetail">) => {
-  // console.log(route);
-
+const CastDetailScreen = ({ navigation, route }: RootNavigationProps<"CastDetail">) => {
   const { id: castId } = route.params;
 
   const [cast, setCast] = useState<States["cast"]>();
+  const [credits, setCredits] = useState<States["movie"][]>();
 
   const fetchCast = async () => {
     try {
       const { data } = await axios.get(`/3/person/${castId}`);
-      // console.log(data);
       setCast(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchCredits = async () => {
+    try {
+      const { data } = await axios.get(`/3/person/${castId}/movie_credits`);
+      setCredits(data.cast);
     } catch (error) {
       console.log(error);
     }
@@ -25,17 +33,20 @@ const CastDetailScreen = ({ navigation, route }: CastStackScreenProps<"CastDetai
 
   useEffect(() => {
     fetchCast();
+    fetchCredits();
   }, []);
 
-  return (
-    <ScrollView>
+  const headerSection = () => (
+    <View>
       <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${cast?.profile_path}` }} height={100} width={100} alt="alt" />
       <Text>{cast?.id}</Text>
       <Text>{cast?.name}</Text>
       <Text>{cast?.place_of_birth}</Text>
       <Text>{cast?.biography}</Text>
-    </ScrollView>
+    </View>
   );
+
+  return <FlatList data={credits} renderItem={({ item }) => <MoviesCard item={item} />} keyExtractor={(item: any) => item.id} ListHeaderComponent={headerSection} />;
 };
 
 export default CastDetailScreen;
