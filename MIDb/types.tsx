@@ -56,6 +56,7 @@ export interface States {
     status?: string;
     tagline?: string | null;
     genre_ids?: number[];
+    runtime?: number;
   };
   cast: {
     biography?: string;
