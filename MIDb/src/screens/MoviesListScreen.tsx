@@ -56,7 +56,6 @@ export default MoviesListScreen;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#030303",
-    // paddingBottom: 70,
   },
   row: {
     flex: 1,
@@ -65,9 +64,8 @@ const styles = StyleSheet.create({
   },
   listContainer: { paddingBottom: 70 },
   header: {
-    // marginVertical: 10,
+    marginVertical: 10,
     paddingHorizontal: 20,
-    // backgroundColor: "tomato",
     backgroundColor: "#030303",
   },
   title: {
