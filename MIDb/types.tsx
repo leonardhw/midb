@@ -59,7 +59,7 @@ export interface States {
   };
   cast: {
     biography?: string;
-    birthday?: Date;
+    birthday?: string;
     id?: number;
     name?: string;
     place_of_birth?: string;
