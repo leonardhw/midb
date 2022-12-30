@@ -26,7 +26,7 @@ const MoviesCard = ({ item }: Props) => {
     <Pressable onPress={() => navigation.push("MovieDetail", { id: item.id })}>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}` }} alt={item.title} style={styles.image} />
+          <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}` }} alt={item.title} style={styles.image} resizeMode='cover' />
         </View>
 
         <HStack style={styles.ratingContainer}>

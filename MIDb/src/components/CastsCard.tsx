@@ -7,9 +7,10 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 interface Props {
   item: States["cast"];
+  page: string;
 }
 
-const CastsCard = ({ item }: Props) => {
+const CastsCard = ({ item, page }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const getAvatar = (image: States["cast"]["profile_path"]) => {
@@ -21,11 +22,12 @@ const CastsCard = ({ item }: Props) => {
     <Pressable onPress={() => navigation.push("CastDetail", { id: item.id })}>
       <HStack style={styles.container}>
         <View style={styles.avatarContainer}>
-          <Image source={{ uri: getAvatar(item.profile_path) }} style={styles.avatar} alt="Test" />
+          <Image source={{ uri: getAvatar(item.profile_path) }} style={styles.avatar} alt={item.name} resizeMode="cover" />
         </View>
         <VStack style={styles.informartion}>
           <Text style={styles.name}>{item.name}</Text>
-          <Text style={styles.popularity}>Popularity: {item.popularity}</Text>
+
+          <Text style={styles.popularity}>{page === "credit" ? `as ${item.character}` : `Popularity: {item.popularity}`}</Text>
         </VStack>
       </HStack>
     </Pressable>
@@ -41,6 +43,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     // backgroundColor: "tomato",
     backgroundColor: "#111",
+    paddingHorizontal: 20,
   },
   avatarContainer: {
     width: 100,

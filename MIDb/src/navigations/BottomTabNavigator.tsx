@@ -15,7 +15,7 @@ type Props = {};
 const BottomTabNavigator = (props: Props) => {
   return (
     <Tab.Navigator
-      initialRouteName="CastsList"
+      initialRouteName="MoviesList"
       screenOptions={({ route }) => {
         return {
           tabBarIcon: ({ focused, color, size }) => {
@@ -63,5 +63,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-{
-}

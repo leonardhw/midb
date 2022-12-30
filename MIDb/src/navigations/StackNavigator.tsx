@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const StackNavigator = (props: Props) => {
   return (
-    <Stack.Navigator initialRouteName="BottomTabNavigator" screenOptions={{ headerShown: true }}>
+    <Stack.Navigator initialRouteName="BottomTabNavigator" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="BottomTabNavigator" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="MovieDetail" component={MovieDetailScreen} />
       <Stack.Screen name="CastDetail" component={CastDetailScreen} />
