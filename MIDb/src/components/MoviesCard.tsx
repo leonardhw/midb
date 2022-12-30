@@ -30,7 +30,7 @@ const MoviesCard = ({ item }: Props) => {
         </View>
 
         <HStack style={styles.ratingContainer}>
-          <AntDesign name="star" size={12} color="#f5b754" />
+          <AntDesign name="star" size={10} color="#f5b754" />
           <Text style={styles.rating}>{item.vote_average}</Text>
         </HStack>
 
@@ -49,7 +49,7 @@ export default MoviesCard;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1 / 2,
+    flex: 1 / 2,
     marginVertical: 15,
     flexWrap: "wrap",
     width: 500 / 3,
@@ -68,16 +68,15 @@ const styles = StyleSheet.create({
   ratingContainer: {
     position: "absolute",
     zIndex: 3,
-    top: 0,
-    right: 0,
+    top: 5,
+    right: 5,
     backgroundColor: "#181818",
     padding: 10,
-    borderTopEndRadius: 15,
-    borderBottomStartRadius: 15,
+    borderRadius: 15,
     alignItems: "center",
   },
   rating: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#f5b754",
     marginLeft: 5,

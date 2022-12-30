@@ -15,7 +15,7 @@ type Props = {};
 const BottomTabNavigator = (props: Props) => {
   return (
     <Tab.Navigator
-      initialRouteName="MoviesList"
+      initialRouteName="CastsList"
       screenOptions={({ route }) => {
         return {
           tabBarIcon: ({ focused, color, size }) => {
