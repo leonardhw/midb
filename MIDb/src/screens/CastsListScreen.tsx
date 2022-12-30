@@ -33,7 +33,7 @@ const CastsListScreen = ({ navigation, route }: RootTabScreenProps<"CastsList">)
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <FlatList data={casts} renderItem={({ item }) => <CastsCard item={item} />} keyExtractor={(item: any) => item.id} ListHeaderComponent={headerSection} contentContainerStyle={styles.listContainer} />
+        <FlatList data={casts} renderItem={({ item }) => <CastsCard item={item} page="casts" />} keyExtractor={(item: any) => item.id} ListHeaderComponent={headerSection} contentContainerStyle={styles.listContainer} />
       </View>
     </SafeAreaView>
   );
