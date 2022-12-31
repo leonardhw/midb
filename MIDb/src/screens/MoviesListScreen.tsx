@@ -41,7 +41,7 @@ const MoviesListScreen = ({ navigation, route }: RootTabScreenProps<"MoviesList"
 
   return (
     <SafeAreaView>
-      {/* <StatusBar barStyle="light-content" backgroundColor="#030303"></StatusBar> */}
+      <StatusBar barStyle="light-content" backgroundColor="#030303" />
       <View style={styles.container}>
         <FlatList data={movies} renderItem={({ item }) => <MoviesCard item={item} />} keyExtractor={(item: any) => item.id} ListHeaderComponent={headerSection} numColumns={2} columnWrapperStyle={styles.row} contentContainerStyle={styles.listContainer} />
       </View>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 10,
     marginEnd: 15,
-    color: "#878787",
+    color: "#87878790",
   },
   navLink_active: {
     color: "#f3f3f3",

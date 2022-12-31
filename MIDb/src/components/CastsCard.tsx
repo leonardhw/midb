@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { HStack, Image, Pressable, VStack } from "native-base";
-import { RootNavigationProps, RootStackParamList, States } from "../../types";
+import { RootStackParamList, States } from "../../types";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
@@ -14,7 +14,7 @@ const CastsCard = ({ item, page }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const getAvatar = (image: States["cast"]["profile_path"]) => {
-    if (image == null) return "https://placekitten.com/185/185";
+    if (image == null) return "https://dummyimage.com/185x185/181818/878787&text=avatar_img";
     return `https://image.tmdb.org/t/p/w185/${image}`;
   };
 
@@ -27,7 +27,7 @@ const CastsCard = ({ item, page }: Props) => {
         <VStack style={styles.informartion}>
           <Text style={styles.name}>{item.name}</Text>
 
-          <Text style={styles.popularity}>{page === "credit" ? `as ${item.character}` : `Popularity: {item.popularity}`}</Text>
+          <Text style={styles.popularity}>{page === "credit" ? `as ${item.character}` : `Popularity: ${item.popularity}`}</Text>
         </VStack>
       </HStack>
     </Pressable>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     // backgroundColor: "tomato",
     backgroundColor: "#111",
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
   },
   avatarContainer: {
     width: 100,

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, StatusBar } from "react-native";
 import React, { useEffect, useState } from "react";
 import { RootTabScreenProps, States } from "../../types";
 import axios from "../apis/axios";
@@ -32,6 +32,7 @@ const CastsListScreen = ({ navigation, route }: RootTabScreenProps<"CastsList">)
 
   return (
     <SafeAreaView>
+      <StatusBar barStyle="light-content" backgroundColor="#030303" />
       <View style={styles.container}>
         <FlatList data={casts} renderItem={({ item }) => <CastsCard item={item} page="casts" />} keyExtractor={(item: any) => item.id} ListHeaderComponent={headerSection} contentContainerStyle={styles.listContainer} />
       </View>
