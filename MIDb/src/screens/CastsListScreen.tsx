@@ -2,9 +2,10 @@ import { StyleSheet, Text, View, StatusBar } from "react-native";
 import React, { useEffect, useState } from "react";
 import { RootTabScreenProps, States } from "../../types";
 import axios from "../apis/axios";
-import { FlatList, HStack, Image } from "native-base";
+import { FlatList } from "native-base";
 import CastsCard from "../components/CastsCard";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { COLORS } from "../constants";
 
 const CastsListScreen = ({ navigation, route }: RootTabScreenProps<"CastsList">) => {
   const [casts, setCasts] = useState<States["cast"][]>();
@@ -15,8 +16,6 @@ const CastsListScreen = ({ navigation, route }: RootTabScreenProps<"CastsList">)
         page: 1,
       },
     });
-    // console.log(data);
-
     setCasts(data.results);
   };
 
@@ -32,7 +31,7 @@ const CastsListScreen = ({ navigation, route }: RootTabScreenProps<"CastsList">)
 
   return (
     <SafeAreaView>
-      <StatusBar barStyle="light-content" backgroundColor="#030303" />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.black} />
       <View style={styles.container}>
         <FlatList data={casts} renderItem={({ item }) => <CastsCard item={item} page="casts" />} keyExtractor={(item: any) => item.id} ListHeaderComponent={headerSection} contentContainerStyle={styles.listContainer} />
       </View>
@@ -44,14 +43,14 @@ export default CastsListScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#030303",
+    backgroundColor: COLORS.black,
   },
 
   listContainer: { paddingBottom: 80 },
   header: {
     marginVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: "#030303",
+    backgroundColor: COLORS.black,
   },
   title: {
     fontSize: 28,
@@ -59,6 +58,6 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     marginTop: 20,
     marginBottom: 20,
-    color: "#f3f3f3",
+    color: COLORS.white,
   },
 });

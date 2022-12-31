@@ -1,16 +1,15 @@
-import { Dimensions, ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View, StatusBar } from "react-native";
+import { Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View, StatusBar, TouchableWithoutFeedback } from "react-native";
 import React, { useEffect, useState } from "react";
-import { RootNavigationProps, RootTabScreenProps } from "../../types";
+import { RootNavigationProps } from "../../types";
 import axios from "../apis/axios";
-import { Center, FlatList, Image, ScrollView } from "native-base";
+import { FlatList, Image, Modal } from "native-base";
 import { States } from "../../types";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import CastsCard from "../components/CastsCard";
+import { COLORS } from "../constants";
+import { getBackdrop, getDate, getPoster, getRating } from "../utils";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -20,6 +19,9 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
   const [movie, setMovie] = useState<States["movie"]>({});
   const [casts, setCasts] = useState<States["cast"][]>([]);
   const [bookmark, setBookmark] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [rating, setRating] = useState<number>(0);
+  const starRatingOptions = [1, 2, 3, 4, 5];
 
   const bookmarkHandler = () => {
     setBookmark(!bookmark);
@@ -30,34 +32,9 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
     fetchCasts();
   }, []);
 
-  const getBackdrop = (image: States["movie"]["backdrop_path"]) => {
-    if (image == null) return "https://dummyimage.com/1280x720/181818/aaa&text=backdrop_img";
-    return `https://image.tmdb.org/t/p/w1280/${image}`;
-  };
-
-  const getPoster = (poster: States["movie"]["poster_path"]) => {
-    if (poster == null) return "https://dummyimage.com/500x750/181818/878787&text=poster_img";
-    return `https://image.tmdb.org/t/p/w500/${poster}`;
-  };
-
-  const getRating = (rating: States["movie"]["vote_average"]) => {
-    if (rating == null) return 0;
-    return Math.floor(rating * 10) / 10;
-  };
-
-  const getDate = (date: any) => {
-    if (!date) return "2022-11-1";
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    let [year, month, day] = date.split("-");
-
-    return `${months[Number(month) - 1]} ${day}, ${year}`;
-  };
-
   const fetchMovieDetail = async () => {
     try {
       const { data } = await axios.get(`/3/movie/${movieId}`);
-      // console.log(data);
-
       setMovie(data);
     } catch (error) {
       console.log(error);
@@ -78,12 +55,12 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
       <View style={styles.headerBar}>
         {/* Back */}
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#f3f3f3" />
+          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
         </TouchableOpacity>
 
         {/* Bookmark */}
         <TouchableOpacity style={styles.backButton} onPress={bookmarkHandler}>
-          <Ionicons name={bookmark ? "ios-bookmark" : "ios-bookmark-outline"} size={24} color="#f3f3f3" />
+          <Ionicons name={bookmark ? "ios-bookmark" : "ios-bookmark-outline"} size={24} color={COLORS.white} />
         </TouchableOpacity>
       </View>
     );
@@ -94,19 +71,10 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
       <ImageBackground source={{ uri: getBackdrop(movie.backdrop_path) }} style={styles.backdrop}>
         <View style={styles.headerBarContainer}>
           {headerBar()}
+          {modals()}
           <View style={styles.gradientContainer}>
-            <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} colors={["transparent", "#030303"]} style={styles.gradient}>
-              <Image
-                source={{ uri: getPoster(movie.poster_path) }}
-                height={750 / 2}
-                width={500 / 2}
-                style={{
-                  position: "absolute",
-                  bottom: 75,
-                  borderRadius: 30,
-                }}
-                alt="alt"
-              />
+            <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} colors={["transparent", COLORS.black]} style={styles.gradient}>
+              <Image source={{ uri: getPoster(movie.poster_path) }} style={styles.poster} alt={`poster of ${movie.title}`} />
               <Text style={styles.title}>{movie.title}</Text>
             </LinearGradient>
           </View>
@@ -126,19 +94,21 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
   const subHeaderSection = () => {
     return (
       <View style={styles.subHeaderContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setShowModal(true)}>
           <View style={styles.categoryContainer}>
-            <AntDesign name="star" size={10} color="#f5b754" />
-            <Text style={[styles.subHeaderText, { marginLeft: 5, color: "#f5b754" }]}>{getRating(movie.vote_average)}</Text>
+            <AntDesign name="star" size={10} color={COLORS.rating} />
+            <Text style={[styles.subHeaderText, { marginLeft: 5, color: COLORS.rating }]}>{getRating(movie.vote_average)}</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <View style={styles.categoryContainer}>
-            <Ionicons name="md-time" size={12} color="#39A2AE" />
-            <Text style={[styles.subHeaderText, { marginLeft: 5 }]}>{movie.runtime}m</Text>
-          </View>
-        </TouchableOpacity>
+        {movie.runtime && (
+          <TouchableOpacity>
+            <View style={styles.categoryContainer}>
+              <Ionicons name="md-time" size={12} color={COLORS.primary} />
+              <Text style={[styles.subHeaderText, { marginLeft: 5 }]}>{movie.runtime}m</Text>
+            </View>
+          </TouchableOpacity>
+        )}
 
         {movie.genres?.map((genre) => {
           return (
@@ -156,9 +126,27 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
   const movieDetails = () => {
     return (
       <View style={{ marginTop: 20 }}>
-        <Text style={styles.subHeaderText}>{movie.overview}</Text>
-        <Text style={[styles.subHeaderText, { marginTop: 20 }]}>Release: {getDate(movie.release_date)}</Text>
+        {movie.overview && <Text style={styles.subHeaderText}>{movie.overview}</Text>}
+        {movie.release_date && <Text style={[styles.subHeaderText, { marginTop: 20 }]}>Release: {getDate(movie.release_date)}</Text>}
       </View>
+    );
+  };
+
+  const modals = () => {
+    return (
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+        <Modal.Content style={styles.modal}>
+          <Modal.Body>
+            <View style={styles.starsContainer}>
+              {starRatingOptions.map((option) => (
+                <TouchableWithoutFeedback onPress={() => setRating(option)} key={option}>
+                  <AntDesign name={rating >= option ? "star" : "staro"} size={32} color={COLORS.rating} />
+                </TouchableWithoutFeedback>
+              ))}
+            </View>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     );
   };
 
@@ -175,7 +163,7 @@ export default MovieDetailScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#030303",
+    backgroundColor: COLORS.black,
   },
   backdrop: {
     width: "100%",
@@ -198,7 +186,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 20,
-    backgroundColor: "#181818",
+    backgroundColor: COLORS.dark,
   },
   gradientContainer: {
     flex: 1,
@@ -214,9 +202,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     lineHeight: 30,
-    // marginTop: 20,
-    // marginBottom: 20,
-    color: "#f3f3f3",
+    color: COLORS.white,
     textAlign: "center",
   },
   subHeaderContainer: {
@@ -234,26 +220,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 7.5,
-    backgroundColor: "#181818",
+    backgroundColor: COLORS.dark,
     marginBottom: 10,
   },
   subHeaderText: {
-    color: "#f3f3f3",
+    color: COLORS.white,
     fontSize: 14,
     fontWeight: "bold",
   },
-  listContainer: { paddingBottom: 20 },
+  listContainer: { paddingBottom: 20, backgroundColor: COLORS.black },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "600",
     lineHeight: 30,
-    // marginTop: 20,
-    // marginBottom: 20,
-    color: "#f3f3f3",
+    color: COLORS.white,
     marginBottom: 10,
     marginTop: 20,
   },
   movieDetails: {
     paddingHorizontal: 20,
+  },
+  modal: {
+    backgroundColor: COLORS.black,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    maxWidth: 400,
+    borderRadius: 30,
+  },
+  starsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  poster: {
+    position: "absolute",
+    bottom: 75,
+    borderRadius: 30,
+    height: 750 / 2,
+    width: 500 / 2,
   },
 });

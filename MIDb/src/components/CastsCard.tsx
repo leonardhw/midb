@@ -4,6 +4,8 @@ import { HStack, Image, Pressable, VStack } from "native-base";
 import { RootStackParamList, States } from "../../types";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { COLORS } from "../constants";
+import { getAvatar } from "../utils";
 
 interface Props {
   item: States["cast"];
@@ -13,11 +15,6 @@ interface Props {
 const CastsCard = ({ item, page }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const getAvatar = (image: States["cast"]["profile_path"]) => {
-    if (image == null) return "https://dummyimage.com/185x185/181818/878787&text=avatar_img";
-    return `https://image.tmdb.org/t/p/w185/${image}`;
-  };
-
   return (
     <Pressable onPress={() => navigation.push("CastDetail", { id: item.id })}>
       <HStack style={styles.container}>
@@ -26,7 +23,6 @@ const CastsCard = ({ item, page }: Props) => {
         </View>
         <VStack style={styles.informartion}>
           <Text style={styles.name}>{item.name}</Text>
-
           <Text style={styles.popularity}>{page === "credit" ? `as ${item.character}` : `Popularity: ${item.popularity}`}</Text>
         </VStack>
       </HStack>
@@ -41,8 +37,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginVertical: 5,
     borderRadius: 30,
-    // backgroundColor: "tomato",
-    backgroundColor: "#111",
+    backgroundColor: COLORS.dark,
     marginHorizontal: 20,
   },
   avatarContainer: {
@@ -61,12 +56,12 @@ const styles = StyleSheet.create({
   name: {
     fontWeight: "700",
     fontSize: 16,
-    color: "#f3f3f3",
+    color: COLORS.white,
     marginBottom: 10,
   },
   popularity: {
     fontWeight: "700",
     fontSize: 12,
-    color: "#878787",
+    color: COLORS.dark_gray,
   },
 });

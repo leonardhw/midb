@@ -1,12 +1,11 @@
-import { StyleSheet, ListRenderItem, Dimensions, StatusBar } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 import React, { useEffect, useState } from "react";
 import { RootTabScreenProps, States } from "../../types";
-import { Button, Text, View, FlatList, HStack } from "native-base";
+import { Text, View, FlatList, HStack } from "native-base";
 import MoviesCard from "../components/MoviesCard";
 import axios from "../apis/axios";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const { width, height } = Dimensions.get("screen");
+import { COLORS } from "../constants";
 
 const MoviesListScreen = ({ navigation, route }: RootTabScreenProps<"MoviesList">) => {
   const [movies, setMovies] = useState<States["movie"][]>([]);
@@ -23,7 +22,6 @@ const MoviesListScreen = ({ navigation, route }: RootTabScreenProps<"MoviesList"
         },
       });
       setMovies(data.results);
-      // console.log(data.results);
     } catch (error) {
       console.log(error);
     }
@@ -31,7 +29,7 @@ const MoviesListScreen = ({ navigation, route }: RootTabScreenProps<"MoviesList"
   const headerSection = () => (
     <View style={styles.header}>
       <Text style={styles.title}>DISCOVER</Text>
-      <HStack style={styles.navigation}>
+      <HStack>
         <Text style={[styles.navLink, styles.navLink_active]}>Now Playing</Text>
         <Text style={styles.navLink}>Popular</Text>
         <Text style={styles.navLink}>Upcoming</Text>
@@ -40,14 +38,12 @@ const MoviesListScreen = ({ navigation, route }: RootTabScreenProps<"MoviesList"
   );
 
   return (
-    <SafeAreaView>
-      <StatusBar barStyle="light-content" backgroundColor="#030303" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.black} />
       <View style={styles.container}>
         <FlatList data={movies} renderItem={({ item }) => <MoviesCard item={item} />} keyExtractor={(item: any) => item.id} ListHeaderComponent={headerSection} numColumns={2} columnWrapperStyle={styles.row} contentContainerStyle={styles.listContainer} />
       </View>
     </SafeAreaView>
-
-    // <Button onPress={() => navigation.navigate("Home")}>Test</Button>
   );
 };
 
@@ -55,7 +51,7 @@ export default MoviesListScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#030303",
+    backgroundColor: COLORS.black,
   },
   row: {
     flex: 1,
@@ -66,7 +62,7 @@ const styles = StyleSheet.create({
   header: {
     marginVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: "#030303",
+    backgroundColor: COLORS.black,
   },
   title: {
     fontSize: 28,
@@ -74,10 +70,7 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     marginTop: 20,
     marginBottom: 20,
-    color: "#f3f3f3",
-  },
-  navigation: {
-    // marginRight: ,
+    color: COLORS.white,
   },
   navLink: {
     fontSize: 16,
@@ -87,6 +80,6 @@ const styles = StyleSheet.create({
     color: "#87878790",
   },
   navLink_active: {
-    color: "#f3f3f3",
+    color: COLORS.white,
   },
 });
