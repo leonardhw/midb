@@ -6,6 +6,7 @@ import MoviesListScreen from "../screens/MoviesListScreen";
 import CastsListScreen from "../screens/CastsListScreen";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Text } from "native-base";
+import { COLORS } from "../constants";
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
@@ -22,10 +23,10 @@ const BottomTabNavigator = (props: Props) => {
             color = "white";
             if (route.name === "MoviesList") {
               iconName = "movie";
-              color = focused ? "#39A2AE" : "#878787";
+              color = focused ? COLORS.primary : COLORS.dark_gray;
             } else if (route.name === "CastsList") {
               iconName = "account-multiple";
-              color = focused ? "#39A2AE" : "#878787";
+              color = focused ? COLORS.primary : COLORS.dark_gray;
             }
             return <MaterialCommunityIcons name={iconName} size={24} color={color} />;
           },
@@ -35,7 +36,6 @@ const BottomTabNavigator = (props: Props) => {
         };
       }}
     >
-      {/* <Tab.Screen name="Home" component={HomeScreen} /> */}
       <Tab.Screen name="MoviesList" component={MoviesListScreen} options={{ title: "Movies" }} />
       <Tab.Screen name="CastsList" component={CastsListScreen} options={{ title: "Stars" }} />
     </Tab.Navigator>
@@ -47,7 +47,7 @@ export default BottomTabNavigator;
 const styles = StyleSheet.create({
   tabBar: {
     height: 65,
-    backgroundColor: "#181818",
+    backgroundColor: COLORS.dark,
     position: "absolute",
     bottom: 5,
     left: 10,

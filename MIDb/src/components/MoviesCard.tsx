@@ -1,12 +1,12 @@
-import { StyleSheet, ListRenderItemInfo, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
-import { HStack, Image, Pressable, Text, View, VStack } from "native-base";
+import { HStack, Image, Pressable, Text, View } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProps, RootStackParamList, States } from "../../types";
+import { RootStackParamList, States } from "../../types";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AntDesign } from "@expo/vector-icons";
-
-const { width, height } = Dimensions.get("screen");
+import { COLORS } from "../constants";
+import { getDate, getPoster, getRating } from "../utils";
 
 interface Props {
   item: States["movie"];
@@ -14,23 +14,6 @@ interface Props {
 
 const MoviesCard = ({ item }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-  const getPoster = (poster: States["movie"]["poster_path"]) => {
-    if (poster == null) return "https://dummyimage.com/500x750/181818/878787&text=poster_img";
-    return `https://image.tmdb.org/t/p/w500/${poster}`;
-  };
-
-  const getDate = (date: any) => {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    let [year, month, day] = date.split("-");
-
-    return `${months[Number(month) - 1]} ${day}, ${year}`;
-  };
-
-  const getRating = (rating: States["movie"]["vote_average"]) => {
-    if (rating == null) return 0;
-    return Math.floor(rating * 10) / 10;
-  };
 
   return (
     <Pressable onPress={() => navigation.push("MovieDetail", { id: item.id })}>
@@ -40,7 +23,7 @@ const MoviesCard = ({ item }: Props) => {
         </View>
 
         <HStack style={styles.ratingContainer}>
-          <AntDesign name="star" size={10} color="#f5b754" />
+          <AntDesign name="star" size={10} color={COLORS.rating} />
           <Text style={styles.rating}>{getRating(item.vote_average)}</Text>
         </HStack>
 
@@ -63,9 +46,6 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     flexWrap: "wrap",
     width: 500 / 3,
-    // padding: 5,
-    // alignItems: "center",
-    // justifyContent: "center",
   },
   imageContainer: {
     flex: 1,
@@ -80,7 +60,7 @@ const styles = StyleSheet.create({
     zIndex: 3,
     top: 5,
     right: 5,
-    backgroundColor: "#181818",
+    backgroundColor: COLORS.dark,
     padding: 10,
     borderRadius: 15,
     alignItems: "center",
@@ -88,7 +68,7 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#f5b754",
+    color: COLORS.rating,
     marginLeft: 5,
   },
   titleContainer: {
@@ -98,12 +78,12 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "700",
     fontSize: 16,
-    color: "#f3f3f3",
+    color: COLORS.white,
     marginTop: 20,
   },
   subTitle: {
     fontWeight: "700",
     fontSize: 12,
-    color: "#878787",
+    color: COLORS.dark_gray,
   },
 });

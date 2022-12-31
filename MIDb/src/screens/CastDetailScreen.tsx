@@ -2,10 +2,12 @@ import { StyleSheet, Text, View, StatusBar, ImageBackground, Dimensions, Touchab
 import React, { useEffect, useState } from "react";
 import { RootNavigationProps, States } from "../../types";
 import axios from "../apis/axios";
-import { FlatList, Image, ScrollView } from "native-base";
+import { FlatList } from "native-base";
 import MoviesCard from "../components/MoviesCard";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { COLORS } from "../constants";
+import { getAvatar } from "../utils";
 
 type Props = {};
 const { width, height } = Dimensions.get("screen");
@@ -19,11 +21,6 @@ const CastDetailScreen = ({ navigation, route }: RootNavigationProps<"CastDetail
 
   const bookmarkHandler = () => {
     setBookmark(!bookmark);
-  };
-
-  const getAvatar = (image: States["cast"]["profile_path"]) => {
-    if (image == null) return "https://dummyimage.com/500x750/181818/878787&text=profile_img";
-    return `https://image.tmdb.org/t/p/h632/${image}`;
   };
 
   const fetchCast = async () => {
@@ -54,12 +51,12 @@ const CastDetailScreen = ({ navigation, route }: RootNavigationProps<"CastDetail
       <View style={styles.headerBar}>
         {/* Back */}
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#f3f3f3" />
+          <Ionicons name="arrow-back" size={24} color={COLORS.white} />
         </TouchableOpacity>
 
         {/* Bookmark */}
         <TouchableOpacity style={styles.backButton} onPress={bookmarkHandler}>
-          <Ionicons name={bookmark ? "ios-bookmark" : "ios-bookmark-outline"} size={24} color="#f3f3f3" />
+          <Ionicons name={bookmark ? "ios-bookmark" : "ios-bookmark-outline"} size={24} color={COLORS.white} />
         </TouchableOpacity>
       </View>
     );
@@ -71,18 +68,16 @@ const CastDetailScreen = ({ navigation, route }: RootNavigationProps<"CastDetail
         <View style={styles.headerBarContainer}>
           {headerBar()}
           <View style={styles.gradientContainer}>
-            <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} colors={["transparent", "#030303"]} style={styles.gradient}>
+            <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} colors={["transparent", COLORS.black]} style={styles.gradient}>
               <Text style={styles.title}>{cast?.name}</Text>
             </LinearGradient>
           </View>
         </View>
       </ImageBackground>
       <View style={styles.movieDetails}>
-        <Text style={styles.subHeaderText}>{cast?.biography}</Text>
-
-        <Text style={[styles.subHeaderText, { marginTop: 10 }]}>Birthplace: {cast?.place_of_birth}</Text>
-
-        <Text style={styles.sectionTitle}>The Cast</Text>
+        {cast?.biography && <Text style={styles.subHeaderText}>{cast?.biography}</Text>}
+        {cast?.place_of_birth && <Text style={[styles.subHeaderText, { marginTop: 10 }]}>Birthplace: {cast?.place_of_birth}</Text>}
+        {credits?.length !== 0 && <Text style={styles.sectionTitle}>Appeared on</Text>}
       </View>
     </View>
   );
@@ -90,8 +85,6 @@ const CastDetailScreen = ({ navigation, route }: RootNavigationProps<"CastDetail
   return (
     <>
       <StatusBar translucent backgroundColor="transparent" />
-      {/* <FlatList data={credits} renderItem={({ item }) => <MoviesCard item={item} />} keyExtractor={(item: any) => item.id} ListHeaderComponent={headerSection} /> */}
-      {/* {headerSection()} */}
       <View style={styles.container}>
         <FlatList data={credits} renderItem={({ item }) => <MoviesCard item={item} />} keyExtractor={(item: any) => item.id} numColumns={2} columnWrapperStyle={styles.row} contentContainerStyle={styles.listContainer} ListHeaderComponent={headerSection} />
       </View>
@@ -104,7 +97,7 @@ export default CastDetailScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#030303",
+    backgroundColor: COLORS.black,
   },
   backdrop: {
     width: "100%",
@@ -115,7 +108,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: "space-between",
   },
-  listContainer: { paddingBottom: 70 },
+  listContainer: { paddingBottom: 20 },
   avatarContainer: {
     width: 300,
     height: 300,
@@ -131,20 +124,18 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     marginTop: 20,
     marginBottom: 20,
-    color: "#f3f3f3",
+    color: COLORS.white,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "600",
     lineHeight: 30,
-    // marginTop: 20,
-    // marginBottom: 20,
-    color: "#f3f3f3",
+    color: COLORS.white,
     marginBottom: 10,
     marginTop: 20,
   },
   subHeaderText: {
-    color: "#f3f3f3",
+    color: COLORS.white,
     fontSize: 14,
     fontWeight: "bold",
   },
@@ -162,7 +153,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 20,
-    backgroundColor: "#181818",
+    backgroundColor: COLORS.dark_gray,
   },
   gradientContainer: {
     flex: 1,
@@ -176,6 +167,6 @@ const styles = StyleSheet.create({
   },
   movieDetails: {
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingTop: 20,
   },
 });
