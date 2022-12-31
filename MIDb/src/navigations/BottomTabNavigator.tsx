@@ -1,5 +1,4 @@
 import React from "react";
-import HomeScreen from "../screens/HomeScreen";
 import { StyleSheet } from "react-native";
 import { RootTabParamList } from "../../types";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";

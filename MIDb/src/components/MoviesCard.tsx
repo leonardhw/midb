@@ -15,6 +15,11 @@ interface Props {
 const MoviesCard = ({ item }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const getPoster = (poster: States["movie"]["poster_path"]) => {
+    if (poster == null) return "https://dummyimage.com/500x750/181818/878787&text=poster_img";
+    return `https://image.tmdb.org/t/p/w500/${poster}`;
+  };
+
   const getDate = (date: any) => {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let [year, month, day] = date.split("-");
@@ -22,16 +27,21 @@ const MoviesCard = ({ item }: Props) => {
     return `${months[Number(month) - 1]} ${day}, ${year}`;
   };
 
+  const getRating = (rating: States["movie"]["vote_average"]) => {
+    if (rating == null) return 0;
+    return Math.floor(rating * 10) / 10;
+  };
+
   return (
     <Pressable onPress={() => navigation.push("MovieDetail", { id: item.id })}>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image source={{ uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}` }} alt={item.title} style={styles.image} resizeMode='cover' />
+          <Image source={{ uri: getPoster(item.poster_path) }} alt={item.title} style={styles.image} resizeMode="cover" />
         </View>
 
         <HStack style={styles.ratingContainer}>
           <AntDesign name="star" size={10} color="#f5b754" />
-          <Text style={styles.rating}>{item.vote_average}</Text>
+          <Text style={styles.rating}>{getRating(item.vote_average)}</Text>
         </HStack>
 
         <View>

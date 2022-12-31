@@ -1,4 +1,4 @@
-import { Dimensions, ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View, StatusBar } from "react-native";
 import React, { useEffect, useState } from "react";
 import { RootNavigationProps, RootTabScreenProps } from "../../types";
 import axios from "../apis/axios";
@@ -16,7 +16,6 @@ const { width, height } = Dimensions.get("screen");
 
 const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDetail">) => {
   const { id: movieId } = route.params;
-  // const navigation = useNavigation<RootNavigationProps<"CastDetail">>();
 
   const [movie, setMovie] = useState<States["movie"]>({});
   const [casts, setCasts] = useState<States["cast"][]>([]);
@@ -32,8 +31,13 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
   }, []);
 
   const getBackdrop = (image: States["movie"]["backdrop_path"]) => {
-    if (image == null) return "https://placekitten.com/1000/1000";
+    if (image == null) return "https://dummyimage.com/1280x720/181818/aaa&text=backdrop_img";
     return `https://image.tmdb.org/t/p/w1280/${image}`;
+  };
+
+  const getPoster = (poster: States["movie"]["poster_path"]) => {
+    if (poster == null) return "https://dummyimage.com/500x750/181818/878787&text=poster_img";
+    return `https://image.tmdb.org/t/p/w500/${poster}`;
   };
 
   const getRating = (rating: States["movie"]["vote_average"]) => {
@@ -63,11 +67,26 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
   const fetchCasts = async () => {
     try {
       const { data } = await axios.get(`/3/movie/${movieId}/credits`);
-      // console.log(data.cast);
       setCasts(data.cast);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const headerBar = () => {
+    return (
+      <View style={styles.headerBar}>
+        {/* Back */}
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={24} color="#f3f3f3" />
+        </TouchableOpacity>
+
+        {/* Bookmark */}
+        <TouchableOpacity style={styles.backButton} onPress={bookmarkHandler}>
+          <Ionicons name={bookmark ? "ios-bookmark" : "ios-bookmark-outline"} size={24} color="#f3f3f3" />
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   const headerSection = () => (
@@ -78,21 +97,13 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
           <View style={styles.gradientContainer}>
             <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} colors={["transparent", "#030303"]} style={styles.gradient}>
               <Image
-                source={{ uri: `https://image.tmdb.org/t/p/w500/${movie.poster_path}` }}
+                source={{ uri: getPoster(movie.poster_path) }}
                 height={750 / 2}
                 width={500 / 2}
                 style={{
                   position: "absolute",
                   bottom: 75,
                   borderRadius: 30,
-
-                  shadowColor: "#000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 12,
-                  },
-                  shadowOpacity: 1,
-                  shadowRadius: 16.0,
                 }}
                 alt="alt"
               />
@@ -101,6 +112,7 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
           </View>
         </View>
       </ImageBackground>
+
       <View style={styles.movieDetails}>
         {subHeaderSection()}
 
@@ -110,22 +122,6 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
       </View>
     </>
   );
-
-  const headerBar = () => {
-    return (
-      <View style={styles.headerBar}>
-        {/* Back */}
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#f3f3f3" />
-        </TouchableOpacity>
-
-        {/* Share */}
-        <TouchableOpacity style={styles.backButton} onPress={bookmarkHandler}>
-          <Ionicons name={bookmark ? "ios-bookmark" : "ios-bookmark-outline"} size={24} color="#f3f3f3" />
-        </TouchableOpacity>
-      </View>
-    );
-  };
 
   const subHeaderSection = () => {
     return (
@@ -168,45 +164,8 @@ const MovieDetailScreen = ({ route, navigation }: RootNavigationProps<"MovieDeta
 
   return (
     <View style={styles.container}>
-      {/* <ScrollView> */}
-      {/* Header */}
-      {/* {headerSection()} */}
-
-      {/* Category & Ratings */}
-      {/* {subHeaderSection()} */}
-
-      {/* Movie Details */}
-
-      {/* Casts */}
-      {/* <FlatList
-          data={casts}
-          // horizontal={true}
-          keyExtractor={(item: any) => item.id}
-          renderItem={({ item }) => (
-            <Pressable onPress={() => navigation.push("CastDetail", { id: item.id })}>
-              <View>
-                <Image source={{ uri: item.profile_path ? `https://image.tmdb.org/t/p/w500/${item.profile_path}` : "https://placekitten.com/100/100" }} height={100} width={100} alt="alt" />
-                <Text>{item.name}</Text>
-              </View>
-            </Pressable>
-          )}
-        /> */}
-      {/* </ScrollView> */}
+      <StatusBar translucent backgroundColor="transparent" />
       <FlatList data={casts} renderItem={({ item }) => <CastsCard item={item} page="credit" />} keyExtractor={(item: any) => item.id} contentContainerStyle={styles.listContainer} ListHeaderComponent={headerSection} />
-      {/* <FlatList
-        data={casts}
-        keyExtractor={(item: any) => item.id}
-        numColumns={3}
-        renderItem={({ item }) => (
-          <Pressable onPress={() => navigation.push("CastDetail", { id: item.id })}>
-            <View>
-              <Image source={{ uri: item.profile_path ? `https://image.tmdb.org/t/p/w500/${item.profile_path}` : "https://placekitten.com/100/100" }} height={100} width={100} alt="alt" />
-              <Text>{item.name}</Text>
-            </View>
-          </Pressable>
-        )}
-        ListHeaderComponent={headerSection}
-      /> */}
     </View>
   );
 };
@@ -283,7 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
-  listContainer: { paddingBottom: 80 },
+  listContainer: { paddingBottom: 20 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "600",
