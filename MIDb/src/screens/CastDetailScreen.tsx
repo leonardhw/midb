@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 20,
-    backgroundColor: COLORS.dark_gray,
+    backgroundColor: COLORS.dark,
   },
   gradientContainer: {
     flex: 1,
